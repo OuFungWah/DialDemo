@@ -221,12 +221,12 @@ public class DialView extends View {
         Paint smallPaint = new Paint();
         smallPaint.setARGB(120, red, green, 60);
         smallPaint.setAntiAlias(true);
-        int smallCircleRadius = radius - 120;
+        int smallCircleRadius = radius - 90;
         canvas.drawCircle(radius, radius, smallCircleRadius, smallPaint);
         //绘制百分比文字
         textPaint.setTextSize(200);
         textPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("" + (int) (percent * 100), radius, radius+50, textPaint);
+        canvas.drawText("" + (int) (percent * 100), radius, radius + 50, textPaint);
     }
 
     /**
@@ -304,15 +304,16 @@ public class DialView extends View {
 
     /**
      * 自定义目标角度（0~300）degree
+     *
      * @param targetAngle
      */
     public void setTargetAngle(float targetAngle) {
-        if (targetAngle >= 0 && targetAngle <= 300) {
-            this.targetAngle = targetAngle;
+        if (targetAngle >= 0 && targetAngle <= 100) {
+            this.targetAngle = targetAngle * 3;
         } else if (targetAngle < 0) {
             this.targetAngle = 0;
-        } else if (targetAngle > 300) {
-            this.targetAngle = 300;
+        } else if (targetAngle > 100) {
+            this.targetAngle = targetAngle * 3;
         }
     }
 
