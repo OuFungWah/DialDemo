@@ -67,6 +67,14 @@ public class DialView extends View {
      */
     private static Paint textPaint;
     /**
+     * 刻线画笔
+     */
+    private static Paint linePatin;
+    /**
+     * 目标刻线画笔
+     */
+    private static Paint targetLinePaint;
+    /**
      * 目标角度
      */
     private float targetAngle;
@@ -87,16 +95,24 @@ public class DialView extends View {
     static {
         paint = new Paint();
         textPaint = new Paint();
-        //设置颜色
+        linePatin = new Paint();
+        targetLinePaint = new Paint();
+        //设置画笔颜色
         paint.setColor(Color.WHITE);
         textPaint.setColor(Color.WHITE);
+        linePatin.setColor(Color.WHITE);
         //设置抗锯齿
         paint.setAntiAlias(true);
         textPaint.setAntiAlias(true);
+        linePatin.setAntiAlias(true);
+        targetLinePaint.setAntiAlias(true);
         //空心
         paint.setStyle(Paint.Style.STROKE);
+        //设置线宽
         textPaint.setStrokeWidth(lineWidth);
         paint.setStrokeWidth(lineWidth);
+        linePatin.setStrokeWidth(lineWidth);
+        targetLinePaint.setStrokeWidth(lineWidth);
     }
 
     public DialView(Context context) {
@@ -136,10 +152,10 @@ public class DialView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        //以最小值为正方形的长
+        //以长和宽的最小值为正方形的边长
         len = Math.min(width, height);
         rectF = new RectF(0, 0, len, len);
-        //设置测量的宽和高
+        //调用这个方法保存测量的宽和高
         setMeasuredDimension(len, len);
     }
 
@@ -156,9 +172,16 @@ public class DialView extends View {
         drawDial(canvas);
     }
 
+    /**
+     * 绘制刻度
+     * @param canvas
+     */
     protected void drawDial(Canvas canvas) {
+        //红色基值
         int red = 255;
+        //绿色基值
         int green = 0;
+        //计算半径
         int radius = len / 2;
         //先保存之前canvas的内容
         canvas.save();
@@ -166,21 +189,8 @@ public class DialView extends View {
         canvas.translate(radius, radius);
         //旋转坐标系
         canvas.rotate(30);
-        Paint linePatin = new Paint();
-        //设置画笔颜色
-        linePatin.setColor(Color.WHITE);
-        //线宽
-        linePatin.setStrokeWidth(lineWidth);
-        //设置画笔抗锯齿
-        linePatin.setAntiAlias(true);
         //确定每次旋转的角度
         rotateAngle = sweepAngle / 100;
-        //绘制有色部分的画笔
-        Paint targetLinePaint = new Paint();
-
-        targetLinePaint.setStrokeWidth(lineWidth);
-        targetLinePaint.setAntiAlias(true);
-
         float hasDraw = 0;
         for (int i = 0; i <= 100; i++) {
             if (hasDraw <= targetAngle && targetAngle != 0) {//需要绘制有色部分的时候
